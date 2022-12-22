@@ -1,3 +1,4 @@
+
 import speech_recognition as sr
 import pyttsx3
 import random
@@ -31,7 +32,7 @@ def get_current_weather(city):
         results_weather = results["weather"]
         results_weather_description = results_weather[0]["description"]
 
-        return f"""The temperature is {round(results_main_temperature-272.15,2)} degrees celcius
+        return f"""The temperature is {round(results_main_temperature - 273.15, 2)} degrees celcius
         The atmospheric pressure is {results_main_pressure} hectopascals
         The humidity is {results_main_humidity} percent
         Description: {results_weather_description}"""
@@ -51,8 +52,8 @@ def say(text):
     engine.runAndWait()
 
 def output(text):
-    say(text)
     print(text)
+    say(text)
 
 def listen():
     with sr.Microphone() as source:
