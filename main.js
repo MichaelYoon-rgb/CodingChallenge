@@ -60,6 +60,12 @@ async function setLondonWeather() {
 
 setLondonWeather();
 
+const synth = window.speechSynthesis || window.webkitSpeechSynthesis;
+
+let voices = [];
+let selectedVoice = synth.getVoices()[0];
+var playingAudio = false;
+
 function onClickActivate() {
   document.getElementById("moveTopContainer").style.animationName = "moveTop";
   document.getElementById("whiteBackground").style.animationName = "growTop";
@@ -80,46 +86,71 @@ function showDetectionContainer() {
   }, 3000);
 }
 
+function speak(text) {
+  if (synth.speaking) {
+    playingAudio = true;
+    console.error("speechSynthesis.speaking");
+    return;
+  }
+  console.log("text", text);
+  playingAudio = true;
+  const utterThis = new SpeechSynthesisUtterance(text);
+
+  utterThis.onend = function (event) {
+    playingAudio = false;
+    console.log("SpeechSynthesisUtterance.onend");
+  };
+
+  utterThis.onerror = function (event) {
+    console.error("SpeechSynthesisUtterance.onerror", event.error);
+  };
+
+  utterThis.voice = selectedVoice;
+
+  utterThis.pitch = 1;
+  utterThis.rate = 1;
+  synth.speak(utterThis);
+}
+
 function activateSpeechRecognition() {
-  speechRecognition.onstart = () => {};
-
-  speechRecognition.onend = () => {};
-
   let final_transcript = "";
 
-  speechRecognition.onresult = (event) => {
-    let interim_transcript = "";
+  speechRecognition.onresult = async (event) => {
+    if (playingAudio == false) {
+      let interim_transcript = "";
 
-    for (let i = event.resultIndex; i < event.results.length; ++i) {
-      if (event.results[i].isFinal) {
-        final_transcript += event.results[i][0].transcript;
-      } else {
-        interim_transcript += event.results[i][0].transcript;
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          final_transcript += event.results[i][0].transcript;
+        } else {
+          interim_transcript += event.results[i][0].transcript;
+        }
       }
-    }
-    document.getElementById("final").innerHTML = final_transcript;
-    document.getElementById("interim").innerHTML = interim_transcript;
-    console.log(interim_transcript);
-    console.log(final_transcript);
-    if (
-      interim_transcript.toLowerCase() == "activate" ||
-      final_transcript.toLowerCase().includes("activate")
-    ) {
-      onClickActivate();
-      showDetectionContainer();
-      final_transcript = "";
-      interim_transcript = "";
       document.getElementById("final").innerHTML = final_transcript;
       document.getElementById("interim").innerHTML = interim_transcript;
-    }
-    if (activated) {
-      showDetectionContainer();
-    }
-    let handledResponse = handleResponses(final_transcript);
-    if (handledResponse.length) {
-      document.getElementById("response").innerHTML = handledResponse;
-      final_transcript = "";
-      interim_transcript = "";
+
+      if (
+        interim_transcript.toLowerCase() == "activate" ||
+        final_transcript.toLowerCase().includes("activate")
+      ) {
+        onClickActivate();
+        showDetectionContainer();
+        final_transcript = "";
+        interim_transcript = "";
+        document.getElementById("final").innerHTML = final_transcript;
+        document.getElementById("interim").innerHTML = interim_transcript;
+      }
+      if (activated) {
+        showDetectionContainer();
+      }
+      let handledResponse = handleResponses(final_transcript);
+
+      if (handledResponse.length) {
+        document.getElementById("response").innerHTML = handledResponse;
+        await speak(handledResponse);
+        final_transcript = "";
+        interim_transcript = "";
+      }
     }
   };
 
