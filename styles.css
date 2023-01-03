@@ -1,0 +1,431 @@
+.waves {
+    width: 100vw;
+    height: 100px;
+  }
+  
+  .pushable {
+    background: rgb(163, 0, 54);
+    border: none;
+    border-radius: 12px;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 1000px;
+  }
+  #graphicsContainer {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .front {
+    display: block;
+    padding: 12px 42px;
+    font-size: 30px;
+  
+    border-radius: 1000px;
+    width: 200px;
+    height: 100px;
+  
+    background: hsl(345deg 100% 47%);
+    color: white;
+    transform: translateY(-8px);
+  }
+  
+  .pushable:active .front {
+    transform: translateY(-2px);
+  }
+  
+  .pushable:focus:not(:focus-visible) {
+    outline: none;
+  }
+  .front {
+    font-family: "Roboto Mono";
+    display: flex;
+    align-items: center;
+    transition: transform 600ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  }
+  
+  .pushable:hover .front {
+    transform: translateY(-15px);
+    transition: transform 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
+  }
+  
+  .pushable:active .front {
+    transform: translateY(-2px);
+    transition: transform 34ms;
+  }
+  body {
+    padding: 0px;
+    margin: 0px;
+  }
+  #container {
+    background-color: rgba(240, 0, 60, 0.3);
+    text-align: center;
+    verticle-align: center;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #whiteBackground {
+    position: absolute;
+    background-color: #f5f5f5;
+    z-index: 10000;
+    height: 0px;
+    width: 100%;
+    bottom: 0;
+    animation-duration: 4s;
+    animation-timing-function: cubic-bezier(0.3, 0.7, 0.4, 1);
+    animation-fill-mode: forwards;
+  }
+  
+  #AudioContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    width: 100vw;
+  }
+  .audioColumn {
+    position: relative;
+    margin: 10px;
+    z-index: 1000;
+    width: 20px;
+    height: 30px;
+    border-radius: 100px;
+    background-color: rgba(240, 0, 60, 0.8);
+    z-index: 100;
+    animation-name: moveAudioColumn;
+    animation-iteration-count: infinite;
+    animation-duration: 1.5s;
+    flex-directional: column;
+  }
+  
+  #listening {
+    font-family: "Roboto Mono";
+    color: rgba(240, 0, 60, 0.8);
+    font-size: 50px;
+    margin-top: 20px;
+  }
+  
+  .waves {
+    width: 100%;
+    height: 10vh;
+  }
+  
+  #moveTopContainer {
+    z-index: 100;
+    position: absolute;
+    bottom: 0;
+    animation-duration: 4s;
+    animation-timing-function: cubic-bezier(0.3, 0.7, 0.4, 1);
+    animation-fill-mode: forwards;
+  }
+  
+  #parallaxContainer {
+    display: flex;
+    flex-direction: row;
+    width: 200vw;
+    animation: parallax 4s linear infinite;
+  }
+  
+  @keyframes move-forever {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      transform: translate3d(-100vw, 0, 0);
+    }
+  }
+  @keyframes moveTop {
+    from {
+      bottom: 0px;
+    }
+    to {
+      bottom: 1000px;
+    }
+  }
+  
+  @keyframes growTop {
+    from {
+      height: 0px;
+    }
+    to {
+      height: 1000px;
+    }
+  }
+  
+  @keyframes moveAudioColumn {
+    0% {
+      height: 30px;
+    }
+    50% {
+      height: 100px;
+    }
+    100% {
+      height: 30px;
+    }
+  }
+  
+  @keyframes parallax {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100vw);
+    }
+  }
+  .hexagon {
+    animation: rotate 5s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+    opacity: 1;
+    position: absolute;
+    stroke-width: 2px;
+  }
+  
+  .hexagon:nth-child(1) {
+    transform: rotate(0deg) scale(0.5);
+    animation-delay: 40ms;
+  }
+  
+  .hexagon:nth-child(2) {
+    transform: rotate(0deg) scale(0.5);
+    animation-delay: 70ms;
+  }
+  .hexagon:nth-child(3) {
+    transform: rotate(0deg) scale(0.5);
+    animation-delay: 36ms;
+  }
+  .hexagon:nth-child(4) {
+    transform: rotate(0deg) scale(0.5);
+    animation-delay: 80ms;
+  }
+  
+  .hexagonLarge {
+    animation: rotateLarge 5s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+    opacity: 0.2;
+    position: absolute;
+  }
+  
+  .hexagonLarge:nth-child(1) {
+    transform: rotate(0deg) scale(1);
+  }
+  
+  .hexagonLarge:nth-child(2) {
+    transform: rotate(0deg) scale(1);
+    animation-delay: 70ms;
+  }
+  .hexagonLarge:nth-child(3) {
+    transform: rotate(0deg) scale(1);
+    animation-delay: 130ms;
+  }
+  .hexagonLarge:nth-child(4) {
+    transform: rotate(0deg) scale(1);
+    animation-delay: 100ms;
+  }
+  
+  .hexagonExtraLarge {
+    animation: rotateExtraLarge 5s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+    opacity: 0.2;
+    position: absolute;
+  }
+  
+  .hexagonExtraLarge:nth-child(1) {
+    transform: rotate(0deg) scale(1);
+  }
+  
+  .hexagonExtraLarge:nth-child(2) {
+    transform: rotate(0deg) scale(1);
+    animation-delay: 70ms;
+  }
+  .hexagonExtraLarge:nth-child(3) {
+    transform: rotate(0deg) scale(1);
+    animation-delay: 130ms;
+  }
+  .hexagonExtraLarge:nth-child(4) {
+    transform: rotate(0deg) scale(1);
+    animation-delay: 100ms;
+  }
+  #hexagonGrid2 {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 50px;
+    right: 5px;
+  }
+  .hexagonHide {
+    animation: hideAnim 3s linear 1;
+    animation-fill-mode: forwards;
+  }
+  @keyframes hideAnim {
+    0% {
+      opacity: 1;
+    }
+    30% {
+      opacity: 0;
+    }
+    70% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  #hexagonGrid {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100px;
+    left: 5px;
+  }
+  .hexagonRow:nth-child(odd) {
+    margin-left: 40px !important;
+  }
+  .hexagonRow {
+    display: flex;
+    flex-direction: row;
+  }
+  .smallHexagon {
+    color: rgb(240, 0, 60);
+    font-size: 135px;
+    margin-left: -5px;
+    margin-right: -5px;
+    margin-top: -46px;
+    margin-bottom: -46px;
+    animation: fade 2s linear infinite;
+  }
+  
+  @keyframes fade {
+    0% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 0.9;
+    }
+    100% {
+      opacity: 0.5;
+    }
+  }
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg) scale(0.5);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: rotate(360deg) scale(0.5);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes rotateLarge {
+    0% {
+      transform: rotate(0deg) scale(1.5);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 0;
+    }
+    100% {
+      transform: rotate(360deg) scale(1.5);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes rotateExtraLarge {
+    0% {
+      transform: rotate(0deg) scale(3);
+      opacity: 0.3;
+    }
+    50% {
+      transform: rotate(360deg) scale(3);
+      opacity: 0.8;
+    }
+    90% {
+      opacity: 0.1;
+    }
+    100% {
+      transform: rotate(720deg) scale(1.5);
+      opacity: 0.1;
+    }
+  }
+  
+  #darkBackground {
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    opacity: 0;
+    z-index: 1000;
+    position: absolute;
+    top: 0px;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+  }
+  
+  @keyframes darkBackgroundAnim {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0.3;
+    }
+  }
+  
+  #interim {
+    color: lightgrey;
+    font-family: "Roboto";
+    font-size: 20px;
+  }
+  #final {
+    font-family: "Roboto";
+    color: DimGray;
+    font-size: 20px;
+  }
+  #response {
+    font-family: "Roboto";
+    color: DimGray;
+    font-size: 20px;
+  }
+  #detectionContainer {
+    width: 80vw;
+    height: 25vh;
+    background-color: white;
+    z-index: 100;
+    border-radius: 10px;
+  
+    box-shadow: 0px 0px 10px lightgrey;
+    position: absolute;
+    bottom: 30px;
+    padding: 20px;
+    text-align: left;
+    opacity: 0;
+  }
+  
+  #line {
+    border-color: lightgrey;
+    opacity: 0.3;
+    top: 25px;
+    display: none;
+  }
+  
+  @keyframes showDetection {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
