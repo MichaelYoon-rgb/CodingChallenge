@@ -117,7 +117,8 @@ function activateSpeechRecognition() {
   let final_transcript = "";
 
   speechRecognition.onresult = async (event) => {
-    if (playingAudio == false) {
+    console.log(playingAudio);
+    if (!synth.speaking) {
       let interim_transcript = "";
 
       for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -148,10 +149,14 @@ function activateSpeechRecognition() {
 
       if (handledResponse.length) {
         document.getElementById("response").innerHTML = handledResponse;
+
         await speak(handledResponse);
         final_transcript = "";
         interim_transcript = "";
       }
+    } else {
+      final_transcript = "";
+      interim_transcript = "";
     }
   };
 
