@@ -19,7 +19,10 @@ var responses = [
   {
     Keyword: ["Recipe"],
     Response: [
-      "1. heat oven to 375˚F (190˚C).<br>2. In a small bowl, mix together the cake mix and 2 tablespoons of melted butter until the mixture is crumbly.<br>3. Pour 1 tablespoon of melted butter into the bottom of two small cast-iron skillets.<br>4. Arrange the apple slices in each skillet, ensuring the bottom is covered.<br>5. Sprinkle cake mixture over the apples.<br>6. Bake for 20 minutes, or until top appears crispy and edges are bubbling.<br>7. Cool for 10 minutes."
+      "Shakshuka<br><br>" + "Ingredients:<br>3 tbsp olive oil<br>2 large onions thinly sliced<br>2 red peppers cut into long slices<br>2 green peppers cut into long slices<br>4 garlic cloves finely chopped<br>½ tsp cumin seeds<br>½ tsp caraway seeds<br>½ tsp cayenne pepper<br>1 tbsp tomato or red pepper purée<br>2 400 grams tins tomatoes<br>1 small bunch fresh coriander roughly chopped<br>1 small bunch fresh parsley roughly chopped<br>8 free-range eggs<br>85 grams crumbled feta<br>8 tbsp thick natural yoghurt or labneh<br>salt and freshly ground black pepper.<br><br>" + "Steps:<br>1. Heat the olive oil in a large, lidded frying pan. Add the onions and peppers and season with salt and pepper. Cook on a medium heat until just softened. Add the garlic and cook for a further 2 minutes. Sprinkle in the cumin and caraway seeds and the cayenne pepper. Stir in the tomato or red pepper purée and cook for a couple more minutes until the paste starts to separate. Add the tomatoes with a splash of water.<br>2. Simmer for 10 minutes, uncovered, until reduced a little. Taste after 5 minutes and add a little sugar if you think the tomatoes need it. Keep an eye on the texture – you don’t want it runny, but it mustn’t get too dry either. Add another splash of water if necessary. When the sauce is reduced, stir in the herbs.<br>3. Make 8 small wells in the sauce. Break an egg into a cup and drop carefully into a well, repeat with the remaining eggs. Cook for a few more minutes until the whites are just set and the yolks are still runny. Sprinkle over the crumbled feta. Serve with yogurt or labneh on the side.",
+      "Banana Bread<br><br>" + "Ingredients:<br>285 grams plain flour<br>1 tsp bicarbonate of soda<br>½ tsp salt<br>110 grams butter, plus extra for greasing<br>225 grams caster sugar<br>2 free-range eggs<br>4 ripe bananas, mashed<br>85ml buttermilk (or normal milk mixed with 1½ tsp lemon juice or vinegar)<br>1 tsp vanilla extract<br><br>" + "Steps:<br>1. Preheat the oven to 180 Celcius/350 Fahrenheit/Gas 4.<br>2. Sift the flour, bicarbonate of soda and salt into a large mixing bowl.<br>3. In a separate bowl, cream the butter and sugar together until light and fluffy.<br>4. Add the eggs, mashed bananas, buttermilk and vanilla extract to the butter and sugar mixture and mix well. Fold in the flour mixture.<br>5. Grease a 20cm x 12.5cm loaf tin and pour the banana bread mixture into the tin.<br>6. Transfer to the oven and bake for about an hour, or until well-risen and golden-brown.<br>7. Remove from the oven and cool in the tin for a few minutes, then turn out onto a wire rack to cool completely before serving.", 
+      "Perfect Chocoloate Chip Cookies<br><br>" + "Ingredients:<br>250 grams plain flour<br>½ tsp baking powder<br>½ tsp bicarbonate of soda<br>½ tsp sea salt flakes, plus extra for sprinkling<br>110 grams unsalted butter, diced and at room temperature<br>110 grams light brown sugar<br>110 grams caster sugar<br>1 large free-range egg<br>½ tsp vanilla extract<br>250 grams chocolate<br><br>" + "Steps:<br>1. To make the cookie dough, whisk together the flour, baking powder, bicarbonate of soda and salt in a large bowl. Place the butter and sugars in a separate large bowl and, using an electric hand-held mixer, beat together for about 4 to 5 minutes until light. Add the egg, beating until fully combined, then briefly mix in the vanilla.<br>2. Add the flour mixture and mix just until a dough is formed. Add the chocolate and mix until evenly distributed.<br>3. Chill the dough for 24 to 48 hours before baking. This process helps the flour to hydrate and makes for a better tasting cookie that is more likely to caramelise as it bakes. You can skip this process but the dough will still need refrigerating for a few hours so that it can be rolled into balls and will bake without spreading too much.<br>4. Preheat the oven to 180 celcius/160 celcius Fan/Gas 4 and line two baking trays with baking paper. Use your hands or an ice cream scoop to form balls of dough (about 60 to 70 grams per cookie). Sprinkle with a little sea salt and place onto the prepared baking trays, leaving 2.5 to 5cm between each cookie.<br>5. Bake, in batches of six, for about 16 to 18 minutes or until golden around the edges but still slightly pale in the middle. Leave to cool for a few minutes before transferring to a wire rack to cool completely. Serve immediately or keep in a sealed container for up to 4 days.", 
+      "Easy slow cooker spaghetti Bolognese<br><br>" + "Ingredients:<br>500 grams beef mince<br>1 medium onion, finely chopped<br>2 garlic cloves, crushed<br>200 grams mushrooms, any kind, sliced<br>400 grams tin chopped tomatoes<br>275ml hot beef stock, made with 1 beef stock cube<br>3 tbsp tomato purée<br>1 tsp dried oregano<br>2 dried bay leaves, or 1 fresh<br>salt and freshly ground black pepper<br>freshly cooked spaghetti, grated cheese and basil, to serve<br><br>" + "Steps:<br>1. Put the mince and onion in a large non-stick frying pan and fry together over a medium–high heat for about 4 minutes, stirring and squishing against the side of the pan with a couple of wooden spoons to break up the mince as much as possible.<br>2. Add the garlic and cook for 1 minute more.<br>3. Tip the mince and onions into the slow cooker and add the mushrooms, tomatoes, stock, tomato purée and herbs. Season with salt and lots of freshly ground black pepper.<br>4. Cover the slow cooker with its lid and cook on high for 4 to 5 hours or low for 6 to 8 hours.<br>5. When ready, serve the Bolognese sauce with freshly cooked spaghetti, some grated cheese and basil, if you like."
     ]
   },
   {
@@ -36,26 +39,25 @@ let speechRecognition = new webkitSpeechRecognition();
 speechRecognition.continuous = true;
 speechRecognition.interimResults = true;
 
-async function getLondonWeather() {
-  let tempValue, descValue;
-  await fetch(
-    "https://api.openweathermap.org/data/2.5/weather?q=" +
-      "london" +
-      "&appid=50a7aa80fa492fa92e874d23ad061374"
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      tempValue = data["main"]["temp"];
-      descValue = data["weather"][0]["description"];
-    });
-  return [tempValue, descValue];
-}
+const zeroKelvin = -273.15;
 
 async function setLondonWeather() {
   let londonWeather = await getLondonWeather();
   responses[1]["Response"].push(
-    londonWeather[0] + " Degrees with " + londonWeather[1]
+    londonWeather[0] + " degrees celcius with " + londonWeather[1]
   );
+  
+  async function getLondonWeather() {
+    let tempValue, descValue;
+    const url = "https://api.openweathermap.org/data/2.5/weather?q=london&appid=50a7aa80fa492fa92e874d23ad061374";
+  
+    const response = await fetch(url);
+    const data = await response.json();
+    tempValue = (data["main"]["temp"] + zeroKelvin).toFixed(2);
+    descValue = data["weather"][0]["description"];
+  
+    return [tempValue, descValue];
+  }
 }
 
 setLondonWeather();
@@ -87,7 +89,7 @@ function showDetectionContainer() {
 }
 
 function speak(text) {
-  text = text.replace(/<br>/g, "");
+  text = text.replace(/<br>/g, "\n");
   if (synth.speaking) {
     playingAudio = true;
     console.error("speechSynthesis.speaking");
