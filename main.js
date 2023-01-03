@@ -19,7 +19,7 @@ var responses = [
   {
     Keyword: ["Recipe"],
     Response: [
-      "<bold>1.</bold> heat oven to 375˚F (190˚C).<br>2. In a small bowl, mix together the cake mix and 2 tablespoons of melted butter until the mixture is crumbly.<br>3. Pour 1 tablespoon of melted butter into the bottom of two small cast-iron skillets.<br>4. Arrange the apple slices in each skillet, ensuring the bottom is covered.<br>5. Sprinkle cake mixture over the apples.<br>6. Bake for 20 minutes, or until top appears crispy and edges are bubbling.<br>7. Cool for 10 minutes."
+      "1. heat oven to 375˚F (190˚C).<br>2. In a small bowl, mix together the cake mix and 2 tablespoons of melted butter until the mixture is crumbly.<br>3. Pour 1 tablespoon of melted butter into the bottom of two small cast-iron skillets.<br>4. Arrange the apple slices in each skillet, ensuring the bottom is covered.<br>5. Sprinkle cake mixture over the apples.<br>6. Bake for 20 minutes, or until top appears crispy and edges are bubbling.<br>7. Cool for 10 minutes."
     ]
   },
   {
@@ -87,6 +87,7 @@ function showDetectionContainer() {
 }
 
 function speak(text) {
+  text = text.replace(/<br>/g, "");
   if (synth.speaking) {
     playingAudio = true;
     console.error("speechSynthesis.speaking");
