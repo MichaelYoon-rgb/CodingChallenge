@@ -53,7 +53,6 @@ async function getLondonWeather() {
 
 async function setLondonWeather() {
   let londonWeather = await getLondonWeather();
-  console.log(londonWeather);
   responses[1]["Response"].push(
     londonWeather[0] + " Degrees with " + londonWeather[1]
   );
@@ -101,9 +100,10 @@ function activateSpeechRecognition() {
     document.getElementById("final").innerHTML = final_transcript;
     document.getElementById("interim").innerHTML = interim_transcript;
     console.log(interim_transcript);
+    console.log(final_transcript);
     if (
-      final_transcript.toLowerCase() == "activate" ||
-      interim_transcript.toLowerCase() == "activate"
+      interim_transcript.toLowerCase() == "activate" ||
+      final_transcript.toLowerCase().includes("activate")
     ) {
       onClickActivate();
       showDetectionContainer();
@@ -134,7 +134,6 @@ function handleResponses(input) {
 
   for (let wordIndex = 0; wordIndex < newInput.length; wordIndex++) {
     let currentWord = newInput[wordIndex];
-    console.log(currentWord);
     for (
       let responseIndex = 0;
       responseIndex < responses.length;
@@ -158,7 +157,6 @@ function handleResponses(input) {
   }
   return "";
 }
-console.log(handleResponses("Tell me a joke."));
 
 function controlAudioColumns() {
   let audioColumn = document.getElementsByClassName("audioColumn");
@@ -183,7 +181,6 @@ function hideRandomHexagon() {
   let hexagons = document.getElementsByClassName("smallHexagon");
   let randomHexagon =
     hexagons[Math.floor(Math.random() * (hexagons.length - 1))];
-  console.log(randomHexagon);
   randomHexagon.classList.add("hexagonHide");
   setTimeout(function () {
     showHexagon(randomHexagon);
