@@ -13,7 +13,7 @@ var responses = [
     ]
   },
   {
-    Keyword: ["Weather", "temperature"],
+    Keyword: ["weather", "temperature"],
     Response: []
   },
   {
