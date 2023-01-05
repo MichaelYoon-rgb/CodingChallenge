@@ -2,7 +2,9 @@
     width: 100vw;
     height: 100px;
   }
-  
+  body {
+  overflow: hidden;
+}
   .pushable {
     background: rgb(163, 0, 54);
     border: none;
