@@ -1,3 +1,4 @@
+import * from "ai.js";
 // Lanuages that could be selected
 var languages = [
   {
