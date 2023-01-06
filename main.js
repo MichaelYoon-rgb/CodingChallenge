@@ -55,7 +55,7 @@ var responses = [
   {
     Keyword: ["birthday"],
     Response: [
-      "Happy Birthday to you<br>Happy Birthday to you<br>Happy Birthday dear (name)<br>Happy Birthday to you."
+      "Happy Birthday to you<br>Happy Birthday to you<br>Happy Birthday to you...<br>Happy Birthday to you."
     ]
   },
   {
@@ -65,21 +65,9 @@ var responses = [
     ]
   },
   {
-    Keyword: ["Coffee Made"],
+    Keyword: ["coffee turkish or greek"],
     Response: [
-      "It is traditionally grown along the “coffee belt” which sits in between the tropics of Cancer and Capricorn, this includes Central & South America, Central Africa, India, and SouthEast Asia."
-    ]
-  },
-  {
-    Keyword: ["Coffee Expensive"],
-    Response: [
-      "Coffee takes around 5 years to grow, then there's harvesting, shipping, roasting and packaging costs."
-    ]
-  },
-  {
-    Keyword: ["coffee addictive"],
-    Response: [
-      "Caffeine is addictive because of the way that the drug affects the human brain and produces the alert feeling that people crave."
+      "It is indeed Turkish Coffee"
     ]
   }
 ];
