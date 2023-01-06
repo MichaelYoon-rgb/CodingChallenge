@@ -54,31 +54,25 @@ var responses = [
   },
   {
     Keyword: ["birthday"],
-    Response: [
-      "Happy Birthday to you<br>Happy Birthday to you<br>Happy Birthday to you...<br>Happy Birthday to you."
-    ]
+    Response: ["Happy Birthday to you<br>Happy Birthday to you<br>Happy Birthday to you...<br>Happy Birthday to you."]
   },
   {
     Keyword: ["hello"],
-    Response: [
-      "Hello, I am Pasham. What would you like me to do?"
-    ]
+    Response: ["Hello, I am Pasham. What would you like me to do?"]
   },
   {
     Keyword: ["coffee turkish or greek"],
-    Response: [
-      "It is indeed Turkish Coffee"
-    ]
+    Response: ["It is indeed Turkish Coffee"]
   }
 ];
 
 var activated = false;
-let speechRecognition = new webkitSpeechRecognition();
 
-speechRecognition.continuous = true;
-speechRecognition.interimResults = true;
+let speechRecognition = new webkitSpeechRecognition();
+speechRecognition.continuous = speechRecognition.interimResults = true;
 
 const zeroKelvin = -273.15;
+const LONDON_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?q=london&appid=50a7aa80fa492fa92e874d23ad061374";
 
 async function setLondonWeather() {
   let londonWeather = await getLondonWeather();
@@ -86,9 +80,8 @@ async function setLondonWeather() {
 
   async function getLondonWeather() {
     let tempValue, descValue;
-    const url = "https://api.openweathermap.org/data/2.5/weather?q=london&appid=50a7aa80fa492fa92e874d23ad061374";
 
-    const response = await fetch(url);
+    const response = await fetch(LONDON_WEATHER_URL);
     const data = await response.json();
     tempValue = (data["main"]["temp"] + zeroKelvin).toFixed(2);
     descValue = data["weather"][0]["description"];
@@ -112,27 +105,24 @@ function onClickActivate() {
   activated = true;
 }
 function showDarkBackground() {
-  document.getElementById("darkBackground").style.animationName =
-    "darkBackgroundAnim";
+  document.getElementById("darkBackground").style.animationName = "darkBackgroundAnim";
 }
 
 function showDetectionContainer() {
   setTimeout(() => {
     showDarkBackground();
     document.getElementById("line").style.display = "block";
-    document.getElementById("detectionContainer").style.animation =
-      "showDetection 2s forwards";
+    document.getElementById("detectionContainer").style.animation ="showDetection 2s forwards";
   }, 3000);
 }
 
 function speak(text) {
   text = text.replace(/<br>/g, "\n");
+  playingAudio = true;
   if (synth.speaking) {
-    playingAudio = true;
     console.error("speechSynthesis.speaking");
     return;
   }
-  playingAudio = true;
   const utterThis = new SpeechSynthesisUtterance(text);
 
   utterThis.onend = function (event) {
@@ -151,93 +141,111 @@ function speak(text) {
   synth.speak(utterThis);
 }
 
-function activateSpeechRecognition() {
+function handleLanguage(interim_transcript, final_transcript, translatedInput, translatedText) {
+  if (interim_transcript.toLowerCase() == "spanish" || final_transcript.toLowerCase().includes("spanish")){
+    
+    speechRecognition.lang="es";
+    translatedText = await translate(final_transcript, "es");
+    translatedInput = true;
+    final_transcript = interim_transcript = "";
+    
+    let successfulSwitch = "I have switched the language";
+    outputResponse(successfulSwitch);
+    await speak(successfulSwitch);
+    
+  }
+  
+  if (interim_transcript.toLowerCase() == "english" || final_transcript.toLowerCase().includes("english")){
+    
+    translatedInput = false;
+    speechRecognition.lang="en";
+    final_transcript = interim_transcript = "";
+    
+    let successfulSwitch = "I have switched the language";
+    outputResponse(successfulSwitch);
+    await speak(successfulSwitch);
+  }
+}
+
+function outputInterim(message) {
+  document.getElementById("interim").innerHTML = message;
+}
+
+function outputFinal(message) {
+  document.getElementById("final").innerHTML = message;
+}
+
+function outputFinalAndInterim(final, interim) {
+  outputFinal(final);
+  outputInterim(interim);
+}
+
+function outputResponse(message) {
+  document.getElementById("response").innerHTML = message;
+}
+
+const activateCommand = "activate";
+
+function handleActivation(final_transcript,interim_transcript) {
+  if (interim_transcript.toLowerCase() == activateCommand || final_transcript.toLowerCase().includes(activateCommand)) {
+    onClickActivate();
+    showDetectionContainer();
+    final_transcript = interim_transcript = "";
+    outputFinalAndInterim(final_transcript, interim_transcript);
+    
+  }
+}
+
+function onResult(final_transcript, translatedInput, translatedText) {
   let final_transcript = "";
-  let translatedInput = false;
+  let interim_transcript = "";
+  
   let translatedText = "";
-
-  speechRecognition.onresult = async (event) => {
-    console.log(synth.speaking, event.results)
-    let interim_transcript = "";
-    if (!synth.speaking) {
-      
-
-      for (let i = event.resultIndex; i < event.results.length; ++i) {
-        if (event.results[i].isFinal) {
-          final_transcript += event.results[i][0].transcript;
-        } else {
-          interim_transcript += event.results[i][0].transcript;
-        }
-      }
-      document.getElementById("final").innerHTML = final_transcript;
-      document.getElementById("interim").innerHTML = interim_transcript;
-
-      if (
-        interim_transcript.toLowerCase() == "activate" ||
-        final_transcript.toLowerCase().includes("activate")
-      ) {
-        onClickActivate();
-        showDetectionContainer();
-        final_transcript = "";
-        interim_transcript = "";
-        document.getElementById("final").innerHTML = final_transcript;
-        document.getElementById("interim").innerHTML = interim_transcript;
-      }
-      
-      if (interim_transcript.toLowerCase() == "spanish" ||
-        final_transcript.toLowerCase().includes("spanish")){
+  let translatedInput = false;
+  
+  console.log(synth.speaking, event.results)
+  
+  if (!synth.speaking) {
+    
+    for (let i = event.resultIndex; i < event.results.length; ++i) {
+      if (event.results[i].isFinal) {
+        final_transcript += event.results[i][0].transcript;
         
-        speechRecognition.lang="es";
-        translatedText = await translate(final_transcript, "es");
-        translatedInput = true;
-        final_transcript = "";
-        interim_transcript = "";
-        
-        let successfulSwitch = "I have switched the language";
-        document.getElementById("response").innerHTML = successfulSwitch;
-        await speak(successfulSwitch);
-        
-      }
-      
-      if (interim_transcript.toLowerCase() == "english" ||
-        final_transcript.toLowerCase().includes("english")){
-        
-        translatedInput = false;
-        speechRecognition.lang="en";
-        final_transcript = "";
-        interim_transcript = "";
-        
-        let successfulSwitch = "I have switched the language";
-        document.getElementById("response").innerHTML = successfulSwitch;
-        await speak(successfulSwitch);
-      }
-      
-      if (activated) {
-        showDetectionContainer();
-      }
-      
-      let handledResponse;
-      
-      if (translatedInput && translatedText.length){
-        translatedText = await translate(final_transcript, "es");
-        handledResponse = handleResponses(translatedText);
       } else {
-        handledResponse = handleResponses(final_transcript);
+        interim_transcript += event.results[i][0].transcript;
+        
       }
-      
-
-      if (handledResponse.length) {
-        document.getElementById("response").innerHTML = handledResponse;
-
-        await speak(handledResponse);
-        final_transcript = "";
-        interim_transcript = "";
-      }
-    } else {
-      final_transcript = "";
-      interim_transcript = "";
     }
-  };
+    
+    outputFinalAndInterim(final_transcript, interim_transcript);
+    
+    handleActivation(final_transcript,interim_transcript);
+    
+    handleLanguage(interim_transcript, final_transcript, translatedInput, translatedText);
+    
+    if (activated) { showDetectionContainer(); }
+    
+    let handledResponse;
+    
+    if (translatedInput && translatedText.length){
+      translatedText = await translate(final_transcript, "es");
+      handledResponse = handleResponses(translatedText);
+    } else {
+      handledResponse = handleResponses(final_transcript);
+    }
+    
+    if (handledResponse.length) {
+      document.getElementById("response").innerHTML = handledResponse;
+
+      await speak(handledResponse);
+      final_transcript = interim_transcript = "";
+      
+    }
+  }
+}
+
+function activateSpeechRecognition() {
+  speechRecognition.onresult = async (event) => { onResult(); };
 
   speechRecognition.start();
 }
@@ -252,28 +260,14 @@ async function translate(source, sourceLang, targetLang="en"){
     console.log(data[0][0][0])
     return data[0][0][0]
   });
-  
-  
-
 }
 
 function handleResponses(input) {
-  let newInput = input;
+  let newInput = input.replace(".", " ").toLowerCase();
 
-  newInput = newInput.replace(".", " ").toLowerCase();
-
-  for (
-    let responseIndex = 0;
-    responseIndex < responses.length;
-    responseIndex++
-  ) {
-    if (
-      responses[responseIndex]["Keyword"].some((keyword) =>
-        newInput.includes(keyword)
-      )
-    ) {
+  for (let responseIndex = 0; responseIndex < responses.length; responseIndex++) {
+    if (responses[responseIndex]["Keyword"].some((keyword) => newInput.includes(keyword))) {
       let validResponses = responses[responseIndex]["Response"];
-
       return validResponses[Math.floor(Math.random() * validResponses.length)];
     }
   }
@@ -289,39 +283,36 @@ function controlAudioColumns() {
     secondCount += 0.1;
   }
 }
+
 function showHexagon(randomHexagon) {
   randomHexagon.classList.remove("hexagonHide");
 }
 
+function getSmallHexagon() {
+  return document.getElementsByClassName("smallHexagon");
+}
+
 function hexagonDelay() {
-  let hexagons = document.getElementsByClassName("smallHexagon");
+  let hexagons = getSmallHexagon();
   for (let i = 0; i < hexagons.length; i++) {
     hexagons[i].style.animationDelay = Math.random() * 2 + "s";
   }
 }
 function hideRandomHexagon() {
-  let hexagons = document.getElementsByClassName("smallHexagon");
-  let randomHexagon =
-    hexagons[Math.floor(Math.random() * (hexagons.length - 1))];
+  let hexagons = getSmallHexagon();
+  let randomHexagon = hexagons[Math.floor(Math.random() * (hexagons.length - 1))];
   randomHexagon.classList.add("hexagonHide");
-  setTimeout(function () {
-    showHexagon(randomHexagon);
-  }, 1500);
+  setTimeout(function () { showHexagon(randomHexagon); }, 1500);
 }
 
 function main() {
   hexagonDelay();
-  setInterval(() => {
-    hideRandomHexagon();
-  }, 3000);
-
-  document
-    .getElementsByClassName("pushable")[0]
-    .addEventListener("click", () => {
-      onClickActivate();
-    });
+  setInterval(() => { hideRandomHexagon(); }, 3000);
+  
+  document.getElementsByClassName("pushable")[0].addEventListener("click", () => { onClickActivate(); });
 
   controlAudioColumns();
   activateSpeechRecognition();
 }
+
 main();
