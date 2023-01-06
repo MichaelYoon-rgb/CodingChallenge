@@ -82,14 +82,11 @@ const zeroKelvin = -273.15;
 
 async function setLondonWeather() {
   let londonWeather = await getLondonWeather();
-  responses[1]["Response"].push(
-    londonWeather[0] + " degrees celcius with " + londonWeather[1]
-  );
+  responses[1]["Response"].push(londonWeather[0] + " degrees celcius with " + londonWeather[1]);
 
   async function getLondonWeather() {
     let tempValue, descValue;
-    const url =
-      "https://api.openweathermap.org/data/2.5/weather?q=london&appid=50a7aa80fa492fa92e874d23ad061374";
+    const url = "https://api.openweathermap.org/data/2.5/weather?q=london&appid=50a7aa80fa492fa92e874d23ad061374";
 
     const response = await fetch(url);
     const data = await response.json();
@@ -281,35 +278,6 @@ function handleResponses(input) {
     }
   }
   return "";
-
-  //for (let wordIndex = 0; wordIndex < newInput.length; wordIndex++) {
-  //  let currentWord = newInput[wordIndex];
-  //
-  //  for (let responseIndex = 0; responseIndex < responses.length; responseIndex++) {
-  //    let keywords = responses[responseIndex]["Keyword"];
-  //
-  //    for (let keywordIndex = 0; keywordIndex < keywords.length; keywordIndex++) {
-  //      if (keywords[keywordIndex].toLowerCase() == currentWord.toLowerCase()) {
-  //        let validResponses = responses[responseIndex]["Response"];
-  //
-  //        return validResponses[
-  //          Math.floor(Math.random() * validResponses.length)
-  //        ];
-  //      }
-  //    }
-  //  }
-  //}
-}
-
-async function handleCoffeeResponse(query) {
-  query = query.slice(1);
-  query = query.replace(/ /g, "+");
-  const URL =
-    "https://serpapi.com/search.json?engine=Google&api_key=392cde0b08a92c037176b15ec1788fd3b5bb68bcc00f4b81607f5ed737967250&q=HEY";
-
-  var response = await fetch(URL);
-
-  console.log(response);
 }
 
 function controlAudioColumns() {
