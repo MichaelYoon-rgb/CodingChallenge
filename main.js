@@ -1,3 +1,22 @@
+var languages = [
+  {
+    Subtag: "es",
+    Name: "Spanish"
+  },
+  {
+    Subtag: "fr",
+    Name: "French"
+  },
+  {
+    Subtag: "de",
+    Name: "German"
+  },
+  {
+    Subtag: "cy",
+    Name: "Welsh"
+  }
+]
+
 var responses = [
   {
     Keyword: ["joke"],
@@ -37,6 +56,30 @@ var responses = [
     Keyword: ["birthday"],
     Response: [
       "Happy Birthday to you<br>Happy Birthday to you<br>Happy Birthday dear (name)<br>Happy Birthday to you."
+    ]
+  },
+  {
+    Keyword: ["hello"],
+    Response: [
+      "Hello, I am Pasham. What would you like me to do?"
+    ]
+  },
+  {
+    Keyword: ["Coffee Made"],
+    Response: [
+      "It is traditionally grown along the “coffee belt” which sits in between the tropics of Cancer and Capricorn, this includes Central & South America, Central Africa, India, and SouthEast Asia."
+    ]
+  },
+  {
+    Keyword: ["Coffee Expensive"],
+    Response: [
+      "Coffee takes around 5 years to grow, then there's harvesting, shipping, roasting and packaging costs."
+    ]
+  },
+  {
+    Keyword: ["coffee addictive"],
+    Response: [
+      "Caffeine is addictive because of the way that the drug affects the human brain and produces the alert feeling that people crave."
     ]
   }
 ];
@@ -125,10 +168,14 @@ function speak(text) {
 
 function activateSpeechRecognition() {
   let final_transcript = "";
+  let translatedInput = false;
+  let translatedText = "";
 
   speechRecognition.onresult = async (event) => {
+    console.log(synth.speaking, event.results)
+    let interim_transcript = "";
     if (!synth.speaking) {
-      let interim_transcript = "";
+      
 
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         if (event.results[i].isFinal) {
@@ -151,20 +198,48 @@ function activateSpeechRecognition() {
         document.getElementById("final").innerHTML = final_transcript;
         document.getElementById("interim").innerHTML = interim_transcript;
       }
-
-      if (
-        interim_transcript.toLowerCase() == "coffee" ||
-        final_transcript.toLowerCase().includes("coffee")
-      ) {
-        console.log("Working");
-        let coffeeResponse = await handleCoffeeResponse(final_transcript);
-        document.getElementById("response").innerHTML = coffeeResponse;
-        await speak(coffeeResponse);
+      
+      if (interim_transcript.toLowerCase() == "spanish" ||
+        final_transcript.toLowerCase().includes("spanish")){
+        
+        speechRecognition.lang="es";
+        translatedText = await translate(final_transcript, "es");
+        translatedInput = true;
+        final_transcript = "";
+        interim_transcript = "";
+        
+        let successfulSwitch = "I have switched the language";
+        document.getElementById("response").innerHTML = successfulSwitch;
+        await speak(successfulSwitch);
+        
       }
+      
+      if (interim_transcript.toLowerCase() == "english" ||
+        final_transcript.toLowerCase().includes("english")){
+        
+        translatedInput = false;
+        speechRecognition.lang="en";
+        final_transcript = "";
+        interim_transcript = "";
+        
+        let successfulSwitch = "I have switched the language";
+        document.getElementById("response").innerHTML = successfulSwitch;
+        await speak(successfulSwitch);
+      }
+      
       if (activated) {
         showDetectionContainer();
       }
-      let handledResponse = handleResponses(final_transcript);
+      
+      let handledResponse;
+      
+      if (translatedInput && translatedText.length){
+        translatedText = await translate(final_transcript, "es");
+        handledResponse = handleResponses(translatedText);
+      } else {
+        handledResponse = handleResponses(final_transcript);
+      }
+      
 
       if (handledResponse.length) {
         document.getElementById("response").innerHTML = handledResponse;
@@ -180,6 +255,21 @@ function activateSpeechRecognition() {
   };
 
   speechRecognition.start();
+}
+
+
+async function translate(source, sourceLang, targetLang="en"){
+  
+  var url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl="+ sourceLang + "&tl=" + targetLang + "&dt=t&q=" + encodeURI(source);
+  return await fetch(url)
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data[0][0][0])
+    return data[0][0][0]
+  });
+  
+  
+
 }
 
 function handleResponses(input) {
