@@ -1,3 +1,4 @@
+// Lanuages that could be selected
 var languages = [
   {
     Subtag: "es",
@@ -17,6 +18,7 @@ var languages = [
   }
 ]
 
+// All responses to user input. The function searches for the key (Keyword) in the input and outputs the value (in Response).
 var responses = [
   {
     Keyword: ["joke"],
@@ -65,15 +67,17 @@ var responses = [
     Response: ["It is indeed Turkish Coffee"]
   }
 ];
-
+// Sets the state of the bot as off.
 var activated = false;
-
+// Creates speechrecognition object and sets it properties.
 let speechRecognition = new webkitSpeechRecognition();
 speechRecognition.continuous = speechRecognition.interimResults = true;
 
+// Variables usedfor the weather searching function. With the url as the open weather api.
 const zeroKelvin = -273.15;
 const LONDON_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?q=london&appid=50a7aa80fa492fa92e874d23ad061374";
 
+// Function used to fetch current weather in London and output temprature and description.
 async function setLondonWeather() {
   let londonWeather = await getLondonWeather();
   responses[1]["Response"].push(londonWeather[0] + " degrees celcius with " + londonWeather[1]);
@@ -85,6 +89,7 @@ async function setLondonWeather() {
     const data = await response.json();
     tempValue = (data["main"]["temp"] + zeroKelvin).toFixed(2);
     descValue = data["weather"][0]["description"];
+    
 
     return [tempValue, descValue];
   }
